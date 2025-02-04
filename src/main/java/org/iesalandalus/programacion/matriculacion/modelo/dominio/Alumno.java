@@ -23,7 +23,7 @@ public class Alumno {
     private final int MIN_EDAD_ALUMNO = 16;
 
 
-    public Alumno(String nombre, String dni,  String telefono,String correo,LocalDate fechaNacimiento) {
+    public Alumno(String nombre, String dni, String telefono, String correo, LocalDate fechaNacimiento) {
         setNombre(nombre);
         setDni(dni);
         setTelefono(telefono);
@@ -36,8 +36,8 @@ public class Alumno {
         if (alumno == null) {
             throw new NullPointerException("ERROR: No es posible copiar un alumno nulo.");
         }
-        setNombre(alumno.nombre);
         setDni(alumno.dni);
+        setNombre(alumno.nombre);
         setTelefono(alumno.telefono);
         setCorreo(alumno.correo);
         setFechaNacimiento(alumno.fechaNacimiento);
@@ -127,6 +127,7 @@ public class Alumno {
         }
 
         this.nombre = formateaNombre(nombre);
+
     }
 
     public String getTelefono() {
@@ -181,7 +182,6 @@ public class Alumno {
         if (fechaNacimiento == null) {
             throw new NullPointerException("ERROR: La fecha de nacimiento de un alumno no puede ser nula.");
         }
-        // fechaNacimiento = LocalDate.parse(fechaNacimiento.format(DateTimeFormatter.ofPattern(Alumno.FORMATO_FECHA)));
 
         long edad = ChronoUnit.YEARS.between(fechaNacimiento, LocalDate.now());
 

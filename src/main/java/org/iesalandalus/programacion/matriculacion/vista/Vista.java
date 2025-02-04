@@ -22,12 +22,6 @@ import java.util.Arrays;
 public class Vista {
 
     private Controlador controlador;
-    public static final int CAPACIDAD = 3;
-    private static Alumnos alumnos = new Alumnos(CAPACIDAD);
-    private static Asignaturas asignaturas = new Asignaturas(CAPACIDAD);
-    public static CiclosFormativos ciclosFormativos = new CiclosFormativos(CAPACIDAD);
-    private static Matriculas matriculas = new Matriculas(CAPACIDAD);
-
 
     public void setControlador(Controlador controlador) {
         if (controlador == null) {
@@ -164,7 +158,10 @@ public class Vista {
 
     private void insertarAsignatura() {
         try {
-            CicloFormativo ciclo = Consola.getCicloPorCodigo();
+            CicloFormativo ciclo = this.controlador.buscar(Consola.getCicloPorCodigo());
+            if (ciclo == null) {
+                System.out.println("ERROR: No se pudo insertar la asignatura porque el ciclo no existe.");
+            }
             Asignatura asignatura = Consola.leerAsignatura(ciclo);
             this.controlador.insertar(asignatura);
             System.out.println("Asignatura insertada correctamente.");
@@ -254,7 +251,10 @@ public class Vista {
 
     private void insertarMatricula() {
         try {
-            Alumno alumno = Consola.getAlumnoPorDni();
+            Alumno alumno = this.controlador.buscar(Consola.getAlumnoPorDni());
+            if (alumno == null) {
+                System.out.println("ERROR: No se pudo insertar la matrícula porque el alumno no existe.");
+            }
             Asignatura[] asignatura = Consola.elegirAsignaturasMatricula(controlador.getAsignaturas());
             Matricula matricula = Consola.leerMatricula(alumno, asignatura);
             this.controlador.insertar(matricula);

@@ -14,7 +14,7 @@ import javax.naming.OperationNotSupportedException;
 
 public class Modelo {
 
-    public final int CAPACIDAD = 10;
+    public final int CAPACIDAD = 3;
     private Alumnos alumnos;
     private Asignaturas asignaturas;
     private CiclosFormativos ciclosFormativos;

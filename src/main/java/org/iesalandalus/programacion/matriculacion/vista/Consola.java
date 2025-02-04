@@ -11,6 +11,7 @@ import javax.naming.OperationNotSupportedException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -95,7 +96,7 @@ public class Consola {
 
         } while (dni == null || dni.isEmpty());
         //return new Alumno(nombre, dni, telefono, correo, fechaNacimiento);
-        return new Alumno("pepe perez",dni, "666333888", "PepePerez@gmail.com", LocalDate.of(2000, 12, 12));
+        return new Alumno("pepe perez", dni, "666333888", "PepePerez@gmail.com", LocalDate.of(2000, 12, 12));
     }
 
     public static Grado leerGrado() {
@@ -103,10 +104,18 @@ public class Consola {
         do {
             System.out.println("Elige el grado: ");
             for (Grado grado : Grado.values()) {
-                System.out.println(grado.ordinal() + grado.toString());
+                System.out.println(grado.ordinal() + 1 + grado.toString());
             }
             opcion = Entrada.entero();
+            if (opcion == 1) {
+                opcion = 0;
+            } else if (opcion == 2) {
+                opcion = 1;
+            } else if (opcion == 3) {
+                opcion = 2;
+            }
         } while (opcion < 0 || opcion > Grado.values().length);
+
         return Grado.values()[opcion];
     }
 
@@ -168,9 +177,16 @@ public class Consola {
         do {
             System.out.println("Elige la especialidad del profesorado: ");
             for (EspecialidadProfesorado especialidadProfesorado : EspecialidadProfesorado.values()) {
-                System.out.println(especialidadProfesorado.ordinal() + especialidadProfesorado.toString());
+                System.out.println(especialidadProfesorado.ordinal() + 1 + especialidadProfesorado.toString());
             }
             opcion = Entrada.entero();
+            if (opcion == 1) {
+                opcion = 0;
+            } else if (opcion == 2) {
+                opcion = 1;
+            } else if (opcion == 3) {
+                opcion = 2;
+            }
         } while (opcion < 0 || opcion > EspecialidadProfesorado.values().length);
         return EspecialidadProfesorado.values()[opcion];
     }
@@ -180,9 +196,14 @@ public class Consola {
         do {
             System.out.println("Elige el curso: ");
             for (Curso curso : Curso.values()) {
-                System.out.println(curso.ordinal() + curso.toString());
+                System.out.println(curso.ordinal() + 1 + curso.toString());
             }
             opcion = Entrada.entero();
+            if (opcion == 1) {
+                opcion = 0;
+            } else if (opcion == 2) {
+                opcion = 1;
+            }
         } while (opcion < 0 || opcion > Curso.values().length);
         return Curso.values()[opcion];
     }
@@ -232,7 +253,7 @@ public class Consola {
         return new Asignatura(codigo, nombre, horasAnuales, curso, horasDesdoble, especialidadProfesorado, cicloFormativo);
     }
 
-    private void mostrarAsignaturas(Asignatura[] asignaturas) {
+    private static void mostrarAsignaturas(Asignatura[] asignaturas) {
         if (asignaturas.length == 0) {
             System.out.println("No hay asignaturas matriculadas.");
         } else {
@@ -240,10 +261,13 @@ public class Consola {
         }
     }
 
-    boolean asignaturaYaMatriculada(Asignatura[] asignaturasMatricula, Asignatura asignatura) {
-        for (Asignatura coleccionAsignatura : asignaturasMatricula) {
-            if (coleccionAsignatura.getCodigo().equals(asignatura.getCodigo())) {
-                return true;
+    static boolean asignaturaYaMatriculada(Asignatura[] asignaturasMatricula, Asignatura asignatura) {
+        if (asignaturasMatricula != null) {
+            for (Asignatura value : asignaturasMatricula) {
+                if (value.equals(asignatura)) {
+                    return true;
+
+                }
             }
         }
         return false;
@@ -295,10 +319,47 @@ public class Consola {
     }
 
     public static Asignatura[] elegirAsignaturasMatricula(Asignatura[] asignaturas) {
-        if (asignaturas.length == 0) {
-            throw new IllegalArgumentException("ERROR: No hay asignaturas matriculadas.");
+        if (asignaturas == null) {
+            throw new NullPointerException("No puedes insertar una matrcula sin una asignatura");
         }
 
-        return new Asignatura[asignaturas.length];
+        Asignatura[] asignaturasMatricula = new Asignatura[asignaturas.length];
+        int opcion;
+
+
+        do {
+            mostrarAsignaturas(asignaturas);
+            for (int i = 0; i < asignaturasMatricula.length; i++) {
+                System.out.println("Introduzca el codigo de la asignatura que desea matricular.");
+                asignaturasMatricula[i] = getAsignaturaPorCodigo();
+
+            }
+
+            Asignatura asignatura = getAsignaturaPorCodigo();
+
+            if (asignaturaYaMatriculada(asignaturasMatricula, asignatura)) {
+                System.out.println("La asignatura ya esta matriculada");
+                System.out.print("¿quieres matricular otra asignatura? (n/s): ");
+                System.out.println("0.- No \n1.- Si");
+                opcion = Entrada.entero();
+            } else {
+                opcion = 0;
+            }
+
+            int indice = -1;
+            for (int i = 0; i < asignaturasMatricula.length; i++) {
+                if (asignaturasMatricula[i] == null) {
+                    indice = i;
+                    break;
+                }
+            }
+
+            if (indice != -1) {
+                asignaturasMatricula[indice] = asignatura;
+            }
+        } while (opcion == 1);
+
+
+        return asignaturasMatricula;
     }
 }
